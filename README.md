@@ -7,6 +7,13 @@ Designed for real-time video surveillance and computer-vision operations centers
 
 ---
 
+## 🌐 Live Production Deployment
+- **🖥️ Live Web Application (Vercel)**: [https://rtsp-stream-viewer-xi.vercel.app/](https://rtsp-stream-viewer-xi.vercel.app/)
+- **⚙️ Live Backend Gateway (Render)**: [https://rtsp-stream-viewer-z0dl.onrender.com/health](https://rtsp-stream-viewer-z0dl.onrender.com/health)
+- **📦 GitHub Source Code**: [https://github.com/abhaygadhvi11/rtsp-stream-viewer](https://github.com/abhaygadhvi11/rtsp-stream-viewer)
+
+---
+
 ## 🌟 Key Features
 
 - **⚡ Ultra-Low-Latency Streaming (<150ms)**: FFmpeg transcodes RTSP streams directly to low-latency MPEG-TS over WebSockets, decoded natively in the browser via HTML5 Canvas (JSMpeg WebGL engine).
