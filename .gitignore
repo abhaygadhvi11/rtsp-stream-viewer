@@ -1,0 +1,24 @@
+# Binaries & builds
+backend/server.exe
+backend/server
+dist/
+build/
+*.exe
+
+# Dependencies
+node_modules/
+vendor/
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+
+# OS Files
+.DS_Store
+Thumbs.db

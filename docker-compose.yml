@@ -1,0 +1,52 @@
+version: '3.8'
+
+services:
+  # MediaMTX RTSP Server for zero-setup local stream testing
+  mediamtx:
+    image: bluenviron/mediamtx:latest
+    container_name: skylark-mediamtx
+    ports:
+      - "8554:8554"  # RTSP TCP/UDP
+      - "1935:1935"  # RTMP
+      - "8888:8888"  # HLS
+      - "8889:8889"  # WebRTC
+    restart: unless-stopped
+
+  # Continuous synthetic camera publisher feeding MediaMTX
+  stream-publisher:
+    image: jrottenberg/ffmpeg:latest
+    container_name: skylark-stream-publisher
+    depends_on:
+      - mediamtx
+    restart: always
+    command: >
+      -re -f lavfi -i testsrc=size=1280x720:rate=30,drawtext=text='MEDIAMTX-CAM-01 %{localtime}':fontcolor=white:fontsize=28:box=1:boxcolor=black@0.6:x=20:y=20
+      -c:v libx264 -preset ultrafast -tune zerolatency -b:v 1500k -f rtsp rtsp://mediamtx:8554/live/cam1
+
+  # Go Backend Service with FFmpeg
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: skylark-backend
+    ports:
+      - "8080:8080"
+    environment:
+      - PORT=8080
+      - FFMPEG_PATH=/usr/bin/ffmpeg
+      - ALLOWED_ORIGINS=*
+    depends_on:
+      - mediamtx
+    restart: unless-stopped
+
+  # React Frontend Service
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: skylark-frontend
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+    restart: unless-stopped
