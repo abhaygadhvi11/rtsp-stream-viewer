@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { X, Plus, Video, Radio, CheckCircle, AlertCircle, Loader2 } from 'lucide-react';
+import { getBackendBaseUrl } from '../utils/api';
 
 interface AddStreamModalProps {
   isOpen: boolean;
@@ -70,8 +71,8 @@ export const AddStreamModal: React.FC<AddStreamModalProps> = ({
     setProbeResult(null);
 
     try {
-      const backendPort = import.meta.env.VITE_BACKEND_PORT || '8080';
-      const res = await fetch(`http://localhost:${backendPort}/api/streams/probe`, {
+      const baseUrl = getBackendBaseUrl();
+      const res = await fetch(`${baseUrl}/api/streams/probe`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ url: url.trim() }),

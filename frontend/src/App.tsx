@@ -4,6 +4,7 @@ import { StreamGrid } from './components/StreamGrid';
 import { AddStreamModal } from './components/AddStreamModal';
 import { SnapshotModal } from './components/SnapshotModal';
 import type { StreamItem, GridLayout, SnapshotItem } from './types/stream';
+import { getBackendBaseUrl } from './utils/api';
 import { Shield, Eye, Cpu, Radio, CheckCircle2, AlertTriangle } from 'lucide-react';
 
 interface Toast {
@@ -59,8 +60,8 @@ export const App: React.FC = () => {
   useEffect(() => {
     const checkHealth = async () => {
       try {
-        const backendPort = import.meta.env.VITE_BACKEND_PORT || '8080';
-        const res = await fetch(`http://localhost:${backendPort}/health`, { signal: AbortSignal.timeout(3000) });
+        const baseUrl = getBackendBaseUrl();
+        const res = await fetch(`${baseUrl}/health`, { signal: AbortSignal.timeout(4000) });
         setBackendOnline(res.ok);
       } catch (e) {
         setBackendOnline(false);

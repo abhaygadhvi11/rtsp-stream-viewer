@@ -13,6 +13,7 @@ import {
 } from 'lucide-react';
 import JSMpeg from '@cycjimmy/jsmpeg-player';
 import type { StreamItem, StreamStatus, SnapshotItem } from '../types/stream';
+import { getBackendWsUrl } from '../utils/api';
 
 interface StreamCardProps {
   stream: StreamItem;
@@ -39,15 +40,6 @@ export const StreamCard: React.FC<StreamCardProps> = ({
   // Frame counter for calculating real-time FPS
   const frameCountRef = useRef<number>(0);
 
-  const getWsUrl = (rtspUrl: string, id: string) => {
-    const loc = window.location;
-    // Default to port 8080 for backend
-    const host = loc.hostname || 'localhost';
-    const protocol = loc.protocol === 'https:' ? 'wss:' : 'ws:';
-    const backendPort = import.meta.env.VITE_BACKEND_PORT || '8080';
-    return `${protocol}//${host}:${backendPort}/ws/stream?url=${encodeURIComponent(rtspUrl)}&id=${encodeURIComponent(id)}`;
-  };
-
   const initPlayer = () => {
     if (!canvasRef.current) return;
 
@@ -61,7 +53,7 @@ export const StreamCard: React.FC<StreamCardProps> = ({
     }
 
     setStatus('CONNECTING');
-    const wsUrl = getWsUrl(stream.url, stream.id);
+    const wsUrl = getBackendWsUrl(stream.url, stream.id);
 
     try {
       const player = new JSMpeg.Player(wsUrl, {
