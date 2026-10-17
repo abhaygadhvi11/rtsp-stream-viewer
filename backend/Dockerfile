@@ -6,7 +6,7 @@ WORKDIR /app
 # Install git for fetching go dependencies
 RUN apk add --no-cache git
 
-COPY go.mod go.sum ./
+COPY go.mod go.sum* ./
 RUN go mod download
 
 COPY . .
